@@ -7,8 +7,7 @@ namespace CloudBankTester
 	
 	
     /*
-     example json file: 
-   
+     example json file:
         {
            "publickey":"preston.CloudCoin.Global",
            "privatekey":"6e2b96d6204a4212ae57ab84260e747f",

@@ -11,8 +11,6 @@ namespace CloudBankTester
  		var $twohundredfifties;
 		
         //Fields
-		
-		
 		/*
 		//use as get and set function
 		function get_()

@@ -9,8 +9,6 @@ namespace Founders
 		var $status;
 		var $pown;
 		var $note;
-		
-		
         //Fields
         //[JsonProperty("nn")]
 		function get_nn()
