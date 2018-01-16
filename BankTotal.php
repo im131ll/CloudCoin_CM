@@ -81,6 +81,7 @@ namespace CloudBankTester
 		}
 
         //Constructors
+		/*
 		function __construct($ones, $fives, $twentyfives, $hundreds, $twohundredfifties)
 		{
 			$this->ones = $ones;
