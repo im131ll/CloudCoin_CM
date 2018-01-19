@@ -10,6 +10,8 @@ namespace CloudBankTester
  		var $hundreds;
  		var $twohundredfifties;
 		
+		
+		
         //Fields
 		/*
 		//use as get and set function
@@ -24,6 +26,7 @@ namespace CloudBankTester
 		}
 		*/
 		
+		/*
         //[JsonProperty("ones")]
 		function get_ones()
 		{
@@ -77,6 +80,8 @@ namespace CloudBankTester
 		{
 			$this->twohundredfifties = $new_twohundredfifties;
 		}
+		
+		*/
 
         //Constructors
 		/*

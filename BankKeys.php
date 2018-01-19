@@ -17,11 +17,13 @@ namespace CloudBankTester
 
  	class BankKeys implements JsonSerializable
     {
+		
+		/*
         //Fields
         //[JsonProperty("publickey")]
 		function get_publickey()
 		{
-			return $this->publickey;
+			return $this->publickey; 
 		}
 		
 		function set_publickey($new_publickey)
@@ -50,6 +52,7 @@ namespace CloudBankTester
 		{
 			$this->email = $new_email;
 		}
+		*/
 
 
         //Constructors

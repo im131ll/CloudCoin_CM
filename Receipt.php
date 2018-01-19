@@ -14,6 +14,7 @@ namespace Founders
 		var $total_counterfeit;
 		var $total_lost;
 		
+		/*
         //[JsonProperty("receipt_id")]
 		function get_receipt_id()
 		{
@@ -79,7 +80,8 @@ namespace Founders
 		{
 			$this->total_lost = $new_total_lost;
 		}
-
+		*/
+		
         //[JsonProperty("receipt")]
         //public ReceiptDetail[] rd 
 		function get_ReceiptDetail()
