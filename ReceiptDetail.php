@@ -11,8 +11,7 @@ namespace Founders
 		var $note;
         //Fields
         //[JsonProperty("nn")]
-		/*
-		
+
 		function get_nn()
 		{
 			return $this->nn;
@@ -65,7 +64,7 @@ namespace Founders
 		{ 
 			$this->note = $new_note; 
 		}
-		*/
+
 
 
         //Constructors

@@ -13,7 +13,7 @@ namespace CloudBankTester
 		
 		
         //Fields
-		/*
+
 		//use as get and set function
 		function get_()
 		{
@@ -24,9 +24,9 @@ namespace CloudBankTester
 		{
 			$this-> = $new_
 		}
-		*/
+
 		
-		/*
+
         //[JsonProperty("ones")]
 		function get_ones()
 		{
@@ -81,7 +81,7 @@ namespace CloudBankTester
 			$this->twohundredfifties = $new_twohundredfifties;
 		}
 		
-		*/
+
 
         //Constructors
 		/*

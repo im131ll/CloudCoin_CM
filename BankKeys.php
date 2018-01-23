@@ -1,10 +1,9 @@
 <?php
 namespace CloudBankTester
 {
-	var $publickey;
-	var $privatekey;
-	var $email;
-	
+	$publickey;
+	$privatekey;
+	$email;
 	
     /*
      example json file:
@@ -18,7 +17,7 @@ namespace CloudBankTester
  	class BankKeys implements JsonSerializable
     {
 		
-		/*
+
         //Fields
         //[JsonProperty("publickey")]
 		function get_publickey()
@@ -52,7 +51,7 @@ namespace CloudBankTester
 		{
 			$this->email = $new_email;
 		}
-		*/
+
 
 
         //Constructors
