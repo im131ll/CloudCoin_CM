@@ -1,6 +1,7 @@
 <?php include("ReceiptDetail.php") ?>
 <?php include("BankKeys.php") ?>
 <?php include("BankTotal.php") ?>
+<?php include("Receipt.php") ?>
 
 <?php
 //using System.Collections.Generic;
@@ -12,31 +13,33 @@
 //using Founders;
 
 //create curl resource
-$ch = curl_init();
+//$ch = curl_init();
 
-
+$r = new Receipt();
 
 namespace CloudBankTester
-{
+{	
     class CloudBankUtils
     {
         //Fields
-        private keys = $BankKeys;
+		private $BankKeys;
+        private $keys;
         private $rawStackForDeposit;
         private $rawStackFromWithdrawal;
         private $rawReceipt;
-        //private HttpClient cli;
         private $receiptNumber;
+		public $totalCoinsWithdrawn;
+		public $onesInBank;
+		public $fivesInBank;
+		public $twentyFivesInBank;
+		public $hundresInBank;
+		public $twohundredfiftiesInBank;
 		
-		$totalCoinsWithdrawn;
-		$onesInBank;
-		$fivesInBank;
-		$twentyFivesInBank;
-		$hundresInBank;
-		$twohundredfiftiesInBank;
+		
+		
 
         //Constructor
-        public function CloudBankUtils( $BankKeys, $startKeys ) {
+        public function __construct($BankKeys,$startKeys) {
             $keys = $startKeys;
             //cli = new HttpClient();
             $totalCoinsWithdrawn = 0;
@@ -53,20 +56,19 @@ namespace CloudBankTester
             $json = "error";
             try {
                 $showCoins = file_get_contents("https://" + $keys.$publickey + "/show_coins.aspx?k=" + $keys.$privatekey);
-                $json = await $showCoins.Content.ReadAsStringAsync();
+                $json = file_get_contents($showCoins);
             } catch(Exception $ex)
             {
                 echo("Exception" + $ex.Message);
             }//end try catch
-            
-            
+                        
             if ($json.Contains("error"))
             {
                 echo($json);
             }
             else
             {
-                $bankTotals = $JsonConvert.DeserializeObject<BankTotal>($json);
+                $bankTotals = unserialize($json);
                 $onesInBank = $bankTotals.$ones;
                 $fivesInBank = $bankTotals.$fives;
                 $twentyFivesInBank = $bankTotals.$twentyfives;
@@ -87,15 +89,16 @@ namespace CloudBankTester
         public function sendStackToCloudBank($toPublicURL)
         {
             $CloudBankFeedback = "";
-            $formContent = new $FormUrlEncodedContent(new[] { new $KeyValuePair<string, string>("stack", $rawStackForDeposit) });
+			
+            $formContent = new FormUrlEncodedContent(new[] { new $KeyValuePair<string, string>("stack", $rawStackForDeposit) });
 
             echo("CloudBank request: " + $toPublicURL + "/deposit_one_stack.aspx");
             echo("Stack File: " + $rawStackForDeposit);
 
             try
             {
-                $result_stack = file_get_contents("https://"+toPublicURL + "/deposit_one_stack.aspx", formContent);
-                $CloudBankFeedback = await $result_stack.Content.ReadAsStringAsync();
+                $result_stack = file_get_contents("https://" + toPublicURL + "/deposit_one_stack.aspx", formContent);
+                $CloudBankFeedback = file_get_contents($result_stack);
             }
             catch (Exception $ex)
             {
@@ -103,7 +106,9 @@ namespace CloudBankTester
             }
 
             echo("CloudBank Response: " + $CloudBankFeedback);
-            var $cbf = JsonConvert.DeserializeObject<Dictionary<string, string>>($CloudBankFeedback);
+			
+            $cbf = JsonConvert.DeserializeObject<Dictionary<string, string>>($CloudBankFeedback);
+			
             //rawReceipt = cbf["receipt"];
             //receiptNumber = cbf["rn"];
             $receiptNumber = $cbf["receipt"];
@@ -118,16 +123,16 @@ namespace CloudBankTester
             echo("Geting Receipt: " + "https://" + $toPublicURL + "/" + $keys.$privatekey + "/Receipts/" + $receiptNumber + ".json");
             $result_receipt = file_get_contents("https://" + $toPublicURL + "/" + $keys.$privatekey + "/Receipts/" + $receiptNumber + ".json");
            
-            $rawReceipt = await $result_receipt.Content.ReadAsStringAsync();
+            $rawReceipt = file_get_contents($result_receipt);
             echo("Raw Receipt: " + $rawReceipt);
         }//End get Receipt
 
         public function getStackFromCloudBank(int $amountToWithdraw)
         {
             $totalCoinsWithdrawn = $amountToWithdraw;
-            	$result_stack = await cli.GetAsync("https://" + $keys.$publickey + "/withdraw_account.aspx?amount=" + $amountToWithdraw + "&k=" + $keys.$privatekey);
-                $rawStackFromWithdrawal = await $result_stack.Content.ReadAsStringAsync();
-                //rawStack = GET(cloudBankURL, receiptNumber);
+            $result_stack = file_get_contents("https://" + $keys.$publickey + "/withdraw_account.aspx?amount=" + $amountToWithdraw + "&k=" + $keys.$privatekey);
+            $rawStackFromWithdrawal = file_get_contents($result_stack);
+            //rawStack = GET(cloudBankURL, receiptNumber);
         }//End get stack from cloudbank
 
 
@@ -169,19 +174,20 @@ namespace CloudBankTester
         public function getReceiptFromCloudBank(string $toPublicURL)
         {
             $result_receipt = file_get_contents("https://" + $keys.$publickey + "/get_receipt.aspx?rn=" + $receiptNumber + "&k=" + $keys.$privatekey);
-            $rawReceipt = await $result_receipt.Content.ReadAsStringAsync();
-            if ($rawReceipt.Contains("Error"))
+            $rawReceipt = file_get_contents($result_receipt);
+            if (strpos($rawReceipt,'Error') !== false)
             {
                 echo($rawReceipt);
             }
             else
             {
-                $deserialReceipt = JsonConvert.DeserializeObject<Receipt>($rawReceipt);
-                for (int i = 0; i < deserialReceipt.rd.Length; i++)
-                    if (deserialReceipt.rd[i].status == "authentic")
+                $deserialReceipt = unserialize($r, $rawReceipt);
+				
+                for ($i = 0; $i < $deserialReceipt.rd.Length; $i++)
+                    if ($deserialReceipt.rd[i].status == "authentic")
                         $totalCoinsWithdrawn += getDenomination(deserialReceipt.rd[i].sn);
                 $result_stack = file_get_contents($keys.$publickey + "/withdraw_one_stack.aspx?amount=" + $totalCoinsWithdrawn + "&k=" + $keys.$privatekey);
-                $rawStackFromWithdrawal = await $result_stack.Content.ReadAsStringAsync();
+                $rawStackFromWithdrawal = file_get_contents($result_stack);
                 //rawStackFromWithdrawal = GET(cloudBankURL, receiptNumber);
             }
         }
@@ -197,13 +203,14 @@ namespace CloudBankTester
             else
             {
                 //tell the client how many coins were uploaded how many counterfeit, etc.
-                $deserialReceipt = JsonConvert.DeserializeObject<Receipt>($rawReceipt);
-                int $totalNotes = $deserialReceipt.$total_authentic + $deserialReceipt.$total_fracked;
-                int $totalCoins = 0;
+                $deserialReceipt = unserialize($r,$rawReceipt);
+                $totalNotes = $deserialReceipt.$total_authentic + $deserialReceipt.$total_fracked;
+                $totalCoins = 0;
+				
                 for (int i = 0; i < deserialReceipt.rd.Length; i++)
                     if (deserialReceipt.rd[i].status == "authentic")
-                        $totalCoins += getDenomination(deserialReceipt.rd[i].sn);
-                $interpretation = "receipt number: " + deserialReceipt.receipt_id + " total authentic notes: " + $totalNotes + " total authentic coins: " + $totalCoins;
+                        $totalCoins += getDenomination($deserialReceipt.rd[i].sn);
+                $interpretation = "receipt number: " + $deserialReceipt.receipt_id + " total authentic notes: " + $totalNotes + " total authentic coins: " + $totalCoins;
 
 
             }//end if error
@@ -212,7 +219,7 @@ namespace CloudBankTester
 
         public function saveStackToFile(string $path)
         {
-            File.WriteAllText($path + getStackName(), $rawStackFromWithdrawal);
+            echo ($path . $getStackName . $rawStackFromWithdrawal);
             //WriteFile(path + stackName, rawStackFromWithdrawal);
         }
 
@@ -225,7 +232,7 @@ namespace CloudBankTester
             //Download amount
             $getStackFromCloudBank($coinsToSend);
             $rawStackForDeposit = $rawStackFromWithdrawal;//Make it so it will send the stack it recieved
-            $sendStackToCloudBank( $toPublicKey);
+            $sendStackToCloudBank($toPublicKey);
             //Upload amount
         }//end transfer
 
