@@ -1,6 +1,7 @@
 <?php include("ReceiptDetail.php") ?>
 <?php
 date_default_timezone_set("UTC");
+
 namespace Founders
 {
 	class Receipt implements JsonSerializable
@@ -14,8 +15,6 @@ namespace Founders
 		var $total_counterfeit;
 		var $total_lost;
 		
-
-        //[JsonProperty("receipt_id")]
 		function get_receipt_id()
 		{
 			return $this->receipt_id;
@@ -24,17 +23,14 @@ namespace Founders
 		{
 			$this->receipt_id = $new_receipt_id;
 		}
-        //[JsonProperty("time")]
 		function timestamp()
 		{
 			mktime();
 		}
-        //[JsonProperty("timezone")]
 		function timezone()
 		{
-			
+			// [h:i:s]
 		}
-        //[JsonProperty("bank_server")]
 		function get_bank_server()
 		{
 			return $this->bank_server;
@@ -43,7 +39,6 @@ namespace Founders
 		{
 			$this->bank_server = $new_bank_server;
 		}
-        //[JsonProperty("total_authentic")]
 		function get_total_authentic()
 		{
 			return $this->total_authentic;
@@ -52,7 +47,6 @@ namespace Founders
 		{
 			$this->total_authentic = $new_total_authentic;
 		}
-        //[JsonProperty("total_fracked")]
 		function get_total_fracked()
 		{
 			return $this->total_fracked;
@@ -61,7 +55,6 @@ namespace Founders
 		{
 			$this->total_fracked = $new_total_fracked;
 		}
-        //[JsonProperty("total_counterfeit")]
 		function get_total_counterfeit()
 		{
 			return $this->total_counterfeit;
@@ -70,8 +63,6 @@ namespace Founders
 		{
 			$this->total_counterfeit = $new_total_counterfeit;
 		}
-
-        //[JsonProperty("total_lost")]
 		function get_total_lost()
 		{
 			return $this->total_lost;
@@ -80,9 +71,7 @@ namespace Founders
 		{
 			$this->total_lost = $new_total_lost;
 		}
-	
-        //[JsonProperty("receipt")]
-        //public ReceiptDetail[] rd 
+		
 		function get_ReceiptDetail()
 		{
 			ReceiptDetail();

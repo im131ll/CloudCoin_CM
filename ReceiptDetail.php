@@ -9,9 +9,8 @@ namespace Founders
 		var $status;
 		var $pown;
 		var $note;
+		
         //Fields
-        //[JsonProperty("nn")]
-
 		function get_nn()
 		{
 			return $this->nn;
@@ -21,8 +20,6 @@ namespace Founders
 		{
 			$this->nn = $new_nn;
 		}
-
-        //[JsonProperty("sn")]
 		function get_sn()
 		{
 			return $this->sn;
@@ -32,8 +29,6 @@ namespace Founders
 		{
 			$this->sn = $new_sn;
 		}
-
-        //[JsonProperty("status")]
 		function get_status()
 		{
 			return $this->status;
@@ -43,9 +38,6 @@ namespace Founders
 		{
 			$this->status = $new_status;
 		}
-
-        //[JsonProperty("pown")]
-        //public string $pown { get; set; }
 		function get_pown()
 		{ 
 			return $this->pown; 
@@ -54,8 +46,6 @@ namespace Founders
 		{ 
 			$this->pown = $new_pown; 
 		}
-
-        //[JsonProperty("note")]
 		function get_note()
 		{ 
 			return $this->note; 
@@ -64,17 +54,7 @@ namespace Founders
 		{ 
 			$this->note = $new_note; 
 		}
-
-
-
-        //Constructors
-		/*
-		function ReceiptDetail()
-        {
-
-        }//end of constructor
-		*/
-
+		
 		function ReceiptDetail($nn, $sn, $status, $pown, $note)
         {
             $this->nn = $nn;

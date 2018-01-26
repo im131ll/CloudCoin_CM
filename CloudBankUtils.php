@@ -4,17 +4,6 @@
 <?php include("Receipt.php") ?>
 
 <?php
-//using System.Collections.Generic;
-//using System.IO;
-//using System;
-//using System.Net.Http;
-//using System.Threading.Tasks;
-//using Newtonsoft.Json;
-//using Founders;
-
-//create curl resource
-//$ch = curl_init();
-
 $r = new Receipt();
 
 namespace CloudBankTester
@@ -35,13 +24,9 @@ namespace CloudBankTester
 		public $hundresInBank;
 		public $twohundredfiftiesInBank;
 		
-		
-		
-
         //Constructor
         public function __construct($BankKeys,$startKeys) {
             $keys = $startKeys;
-            //cli = new HttpClient();
             $totalCoinsWithdrawn = 0;
             $onesInBank = 0;
             $fivesInBank = 0;
@@ -74,7 +59,6 @@ namespace CloudBankTester
                 $twentyFivesInBank = $bankTotals.$twentyfives;
                 $hundresInBank = $bankTotals.$hundreds;
                 $twohundredfiftiesInBank = $bankTotals.$twohundredfifties;
-                //rawStackFromWithdrawal = GET(cloudBankURL, receiptNumber);
             }
 
         }//end show coins
@@ -82,7 +66,6 @@ namespace CloudBankTester
 
         public function loadStackFromFile($filename)
         {
-            //rawStackForDeposit = ReadFile( filename);
             $rawStackForDeposit = File.ReadAllText($filename);
         }
 
@@ -97,7 +80,7 @@ namespace CloudBankTester
 
             try
             {
-                $result_stack = file_get_contents("https://" + toPublicURL + "/deposit_one_stack.aspx", formContent);
+                $result_stack = file_get_contents("https://" + $toPublicURL + "/deposit_one_stack.aspx", $formContent);
                 $CloudBankFeedback = file_get_contents($result_stack);
             }
             catch (Exception $ex)
@@ -107,12 +90,9 @@ namespace CloudBankTester
 
             echo("CloudBank Response: " + $CloudBankFeedback);
 			
-            $cbf = JsonConvert.DeserializeObject<Dictionary<string, string>>($CloudBankFeedback);
-			
-            //rawReceipt = cbf["receipt"];
-            //receiptNumber = cbf["rn"];
+            $cbf = unserialize($CloudBankFeedback);
             $receiptNumber = $cbf["receipt"];
-            //Console.Out.WriteLine("Raw Receipt: " + rawReceipt);
+
         }//End send stack
 
 
@@ -132,7 +112,6 @@ namespace CloudBankTester
             $totalCoinsWithdrawn = $amountToWithdraw;
             $result_stack = file_get_contents("https://" + $keys.$publickey + "/withdraw_account.aspx?amount=" + $amountToWithdraw + "&k=" + $keys.$privatekey);
             $rawStackFromWithdrawal = file_get_contents($result_stack);
-            //rawStack = GET(cloudBankURL, receiptNumber);
         }//End get stack from cloudbank
 
 
@@ -188,7 +167,6 @@ namespace CloudBankTester
                         $totalCoinsWithdrawn += getDenomination(deserialReceipt.rd[i].sn);
                 $result_stack = file_get_contents($keys.$publickey + "/withdraw_one_stack.aspx?amount=" + $totalCoinsWithdrawn + "&k=" + $keys.$privatekey);
                 $rawStackFromWithdrawal = file_get_contents($result_stack);
-                //rawStackFromWithdrawal = GET(cloudBankURL, receiptNumber);
             }
         }
 
@@ -207,10 +185,10 @@ namespace CloudBankTester
                 $totalNotes = $deserialReceipt.$total_authentic + $deserialReceipt.$total_fracked;
                 $totalCoins = 0;
 				
-                for (int i = 0; i < deserialReceipt.rd.Length; i++)
-                    if (deserialReceipt.rd[i].status == "authentic")
-                        $totalCoins += getDenomination($deserialReceipt.rd[i].sn);
-                $interpretation = "receipt number: " + $deserialReceipt.receipt_id + " total authentic notes: " + $totalNotes + " total authentic coins: " + $totalCoins;
+                for ($i = 0; $i <= deserialReceipt.rd.Length; $i++)
+                    if (deserialReceipt.rd[$i].status == "authentic")
+                        $totalCoins += getDenomination($deserialReceipt.rd[$i].sn);
+                $interpretation = "receipt number: " + $deserialReceipt + " total authentic notes: " + $totalNotes + " total authentic coins: " + $totalCoins;
 
 
             }//end if error
@@ -220,7 +198,6 @@ namespace CloudBankTester
         public function saveStackToFile(string $path)
         {
             echo ($path . $getStackName . $rawStackFromWithdrawal);
-            //WriteFile(path + stackName, rawStackFromWithdrawal);
         }
 
         public function getStackName()
@@ -230,9 +207,9 @@ namespace CloudBankTester
 
         public function transferCloudCoins( string $toPublicKey, int $coinsToSend) {
             //Download amount
-            $getStackFromCloudBank($coinsToSend);
+            getStackFromCloudBank($coinsToSend);
             $rawStackForDeposit = $rawStackFromWithdrawal;//Make it so it will send the stack it recieved
-            $sendStackToCloudBank($toPublicKey);
+            sendStackToCloudBank($toPublicKey);
             //Upload amount
         }//end transfer
 
