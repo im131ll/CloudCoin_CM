@@ -1,10 +1,8 @@
-<?php include("ReceiptDetail.php") ?>
 <?php
 date_default_timezone_set("UTC");
 
-namespace Founders
-{
-	class Receipt implements JsonSerializable
+	require("ReceiptDetail.php");
+	class Receipt
     {
 		var $receipt_id;
 		var $time;
@@ -76,7 +74,5 @@ namespace Founders
 		{
 			ReceiptDetail();
 		}
-
-    }
-}
+	}
 ?>

@@ -1,8 +1,8 @@
 <?php
 
-namespace CloudBankTester
+//namespace CloudBankTester
 {
-    class BankTotal implements JsonSerializable
+    class BankTotal
     {	
 		var $ones;
  		var $fives;

@@ -1,8 +1,6 @@
 <?php
 
-namespace Founders 
-{
-	class ReceiptDetail implements JsonSerializable
+	class ReceiptDetail
 	{
 		var $nn;
 		var $sn;
@@ -55,7 +53,7 @@ namespace Founders
 			$this->note = $new_note; 
 		}
 		
-		function ReceiptDetail($nn, $sn, $status, $pown, $note)
+		function receiptDetail($nn, $sn, $status, $pown, $note)
         {
             $this->nn = $nn;
             $this->sn = $sn;
@@ -66,6 +64,4 @@ namespace Founders
         }//end of constructor
 
 	}
-		
-}//End Namespace
 ?>

@@ -1,5 +1,6 @@
 <?php
-namespace CloudBankTester
+
+//namespace CloudBankTester
 {
 	$publickey;
 	$privatekey;
@@ -13,7 +14,7 @@ namespace CloudBankTester
            "email":""
          }
          */
- 	class BankKeys implements JsonSerializable
+ 	class BankKeys
     {
 		
 
