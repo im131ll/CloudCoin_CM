@@ -2,9 +2,7 @@
 
 //namespace CloudBankTester
 {
-	$publickey;
-	$privatekey;
-	$email;
+	
 	
     /*
      example return file:
@@ -44,7 +42,7 @@
 		{
 			$this->email = $new_email;
 		}
-        public function BankKeys($publickey, $privatekey, $email)
+        function BankKeys($publickey, $privatekey, $email)
         {
             $this->publickey = $publickey;
             $this->privatekey = $privatekey;
