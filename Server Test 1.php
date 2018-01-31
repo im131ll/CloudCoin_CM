@@ -10,7 +10,6 @@
 	<?php
 		include 'CloudBankUtils.php';
 		$keys = new BankKeys("preston@CloudCoin.Global","6e2b96d6204a4212ae57ab84260e747f","Iambadatphp@learning.com");
-		
 		$coins = new CloudBankUtils($keys);
 		echo $coins->showCoins();
 		echo '<br>';

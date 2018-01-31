@@ -1,9 +1,9 @@
-<?php include("Receipt.php") ?>
-<?php include("BankKeys.php") ?>
-<?php include("BankTotal.php") ?>
-
 <?php
-//namespace CloudBankTester
+
+	include("BankTotal.php");
+	include("BankKeys.php");
+	include("Receipt.php");
+
 {	
     class CloudBankUtils
     {
@@ -20,9 +20,11 @@
 		public $twentyFivesInBank;
 		public $hundresInBank;
 		public $twohundredfiftiesInBank;
+		//public $startKeys;
 		
         //Constructor
-        public function __construct($startKeys) {
+        public function __construct(BankKeys $BankKeys) {
+			$this->BankKeys = $BankKeys;
             $keys = $startKeys;
             $totalCoinsWithdrawn = 0;
             $onesInBank = 0;
@@ -30,6 +32,9 @@
             $twentyFivesInBank = 0;
             $hundresInBank = 0;
             $twohundredfiftiesInBank = 0;
+			$publickey = new $BankKeys->get_publickey();
+			$privatekey = new $BankKeys->get_privatekey();
+			
         }//end constructor
 
         //Methods
@@ -38,7 +43,7 @@
             $json = "error";
             try {
                 $showCoins = curl_init("https://" + $keys.=$publickey + "/show_coins.aspx?k=" + $keys.=$privatekey);
-                $json = curl_setopt($showCoins);
+                $json = curl_setopt($showCoins, curlopt_post, 1);
 				$showCoinsOut = curl_exec($showCoins);
 				curl_close($showCoins);
             } catch(Exception $ex)
@@ -78,8 +83,8 @@
 
             try
             {
-                $result_stack = curl_init("https://" + $toPublicURL + "/deposit_one_stack.aspx", $formContent);
-                $CloudBankFeedback = curl_setopt($result_stack);
+                $result_stack = curl_init(curl_url, "https://" + $toPublicURL + "/deposit_one_stack.aspx", $formContent);
+                $CloudBankFeedback = curl_setopt($result_stack, curlopt_post, 1);
 				$resultStackOut = curl_exec($result_stack);
 				curl_close($result_stack);
             }
@@ -101,8 +106,8 @@
         function getReceipt(string $toPublicURL)
         {
             echo("Geting Receipt: " + "https://" + $toPublicURL + "/" + $keys.=$privatekey + "/Receipts/" + $receiptNumber + ".json");
-            $result_receipt = curl_init("https://" + $toPublicURL + "/" + $keys.=$privatekey + "/Receipts/" + $receiptNumber + ".json");
-            $rawReceipt = curl_setopt($result_receipt);
+            $result_receipt = curl_init(curl_url, "https://" + $toPublicURL + "/" + $keys.=$privatekey + "/Receipts/" + $receiptNumber + ".json");
+            $rawReceipt = curl_setopt($result_receipt, curlopt_post, 1);
 			$resultReceiptOut = curl_exec($result_receipt);
 			curl_close($result_receipt);
             echo("Raw Receipt: " + $rawReceipt);
@@ -111,8 +116,8 @@
         function getStackFromCloudBank(int $amountToWithdraw)
         {
             $totalCoinsWithdrawn = $amountToWithdraw;
-            $result_stack = curl_init("https://" + $keys.=$publickey + "/withdraw_account.aspx?amount=" + $amountToWithdraw + "&k=" + $keys.=$privatekey);
-            $rawStackFromWithdrawal = curl_setopt($result_stack);
+            $result_stack = curl_init(curl_url, "https://" + $keys.=$publickey + "/withdraw_account.aspx?amount=" + $amountToWithdraw + "&k=" + $keys.=$privatekey);
+            $rawStackFromWithdrawal = curl_setopt($result_stack, curlopt_post, 1);
 			$resultStackOut = curl_exec($result_stack);
 			curl_close($result_stack);
         }//End get stack from cloudbank
@@ -155,8 +160,8 @@
 
         function getReceiptFromCloudBank(string $toPublicURL)
         {
-            $result_receipt = curl_init("https://" + $keys.=$publickey + "/get_receipt.aspx?rn=" + $receiptNumber + "&k=" + $keys.=$privatekey);
-            $rawReceipt = curl_setopt($result_receipt);
+            $result_receipt = curl_init(curl_url, "https://" + $keys.=$publickey + "/get_receipt.aspx?rn=" + $receiptNumber + "&k=" + $keys.=$privatekey);
+            $rawReceipt = curl_setopt($result_receipt, curlopt_post, 1);
 			$resultReceiptOut = curl_exec($result_receipt);
 			curl_close($result_receipt);
             if (strpos($rawReceipt,'Error') !== false)
@@ -170,8 +175,8 @@
                 for ($i = 0; $i < $deserialReceipt.rd.Length; $i++)
                     if ($deserialReceipt.rd[$i].status == "authentic")
                         $totalCoinsWithdrawn += getDenomination($deserialReceipt.rd[$i].sn);
-                $result_stack = curl_init($keys.=$publickey + "/withdraw_one_stack.aspx?amount=" + $totalCoinsWithdrawn + "&k=" + $keys.=$privatekey);
-                $rawStackFromWithdrawal = curl_setopt($result_stack);
+                $result_stack = curl_init(curl_url, $keys.=$publickey + "/withdraw_one_stack.aspx?amount=" + $totalCoinsWithdrawn + "&k=" + $keys.=$privatekey);
+                $rawStackFromWithdrawal = curl_setopt($result_stack, curlopt_post, 1);
 				$resultStackOut = curl_exec($result_stack);
 				curl_close($result_stack);
             }
@@ -215,7 +220,7 @@
         function transferCloudCoins( string $toPublicKey, int $coinsToSend) {
             //Download amount
             getStackFromCloudBank($coinsToSend);
-            $rawStackForDeposit = $rawStackFromWithdrawal;//Make it so it will send the stack it recieved
+            $rawStackForDeposit .= $rawStackFromWithdrawal;//Make it so it will send the stack it recieved
             sendStackToCloudBank($toPublicKey);
             //Upload amount
         }//end transfer

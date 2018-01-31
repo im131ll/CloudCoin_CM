@@ -2,6 +2,7 @@
 date_default_timezone_set("UTC");
 
 	require("ReceiptDetail.php");
+
 	class Receipt
     {
 		var $receipt_id;
