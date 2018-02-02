@@ -1,9 +1,5 @@
 <?php
 
-//namespace CloudBankTester
-{
-	
-	
     /*
      example return file:
         {
@@ -11,11 +7,10 @@
            "privatekey":"6e2b96d6204a4212ae57ab84260e747f",
            "email":""
          }
-         */
+    */
+
  	class BankKeys
     {
-		
-
         //Fields
 		function get_publickey()
 		{
@@ -48,8 +43,5 @@
             $this->privatekey = $privatekey;
             $this->email = $email;
         }//end of constructor
-
-
-    }
-}
+	}
 ?>

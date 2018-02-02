@@ -1,6 +1,6 @@
 <?php
-date_default_timezone_set("UTC");
 
+	date_default_timezone_set("UTC");
 	require("ReceiptDetail.php");
 
 	class Receipt
@@ -28,7 +28,7 @@ date_default_timezone_set("UTC");
 		}
 		function timezone()
 		{
-			// [h:i:s]
+			// [h:i:s] possible solution
 		}
 		function get_bank_server()
 		{
@@ -70,7 +70,6 @@ date_default_timezone_set("UTC");
 		{
 			$this->total_lost = $new_total_lost;
 		}
-		
 		function get_ReceiptDetail()
 		{
 			ReceiptDetail();

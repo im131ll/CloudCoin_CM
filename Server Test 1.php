@@ -17,8 +17,12 @@
 		$strURL = 'https://bank.cloudcoin.global/service/print_welcome.aspx';
 		$strContent = file_get_contents($strURL, "rb");
 		echo $strContent;
-		
 		echo '<br>';
+		
+		//test to see if server is up and return file.
+		//$strURL = 'https://raida0.cloudcoin.global/service/echo';
+		//$strContent = file_get_contents($strURL, "rb");
+		//echo $strContent;
 		
 		function getCoins()
 		{

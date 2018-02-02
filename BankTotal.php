@@ -1,7 +1,5 @@
 <?php
 
-//namespace CloudBankTester
-{
     class BankTotal
     {	
 		var $ones;
@@ -9,7 +7,7 @@
  		var $twentyfives;
  		var $hundreds;
  		var $twohundredfifties;
-
+		
 		function get_ones()
 		{
 			return $this->ones;
@@ -50,11 +48,8 @@
 		{
 			$this->twohundredfifties = $new_twohundredfifties;
 		}
-		
-
-
         //Constructors
-		/*
+		
 		function __construct($ones, $fives, $twentyfives, $hundreds, $twohundredfifties)
 		{
 			$this->ones = $ones;
@@ -63,12 +58,6 @@
             $this->hundreds = $hundreds;
             $this->twohundredfifties = $twohundredfifties;
 		}
-		/*
-		function BankTotal()
-        {
-
-        }
-		*/
 		
 		function BankTotal($ones, $fives, $twentyfives, $hundreds, $twohundredfifties)
         {
@@ -81,5 +70,4 @@
         }//end of constructor
 
     }
-}
 ?>
